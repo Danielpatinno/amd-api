@@ -28,10 +28,6 @@ class LoginUserController {
     try {
       const user = await this.loginService.execute({ email, password });
 
-      if (!user) {
-        return reply.status(401).send({ error: 'Credenciais inválidas' });
-      }
-
       const token = jwt.sign(
         { id: user.id, email: user.email },
         process.env.JWT_SECRET as string,
@@ -41,9 +37,15 @@ class LoginUserController {
       reply.status(200).send({ user, token });
     } catch (error: any) {
       console.error('Erro ao fazer login:', error);
-      reply.status(500).send({ error: 'Credenciais inválidas' });
+
+      if (error.message === 'Credenciais inválidas') {
+        return reply.status(401).send({ error: 'Credenciais inválidas' });
+      }
+
+      return reply.status(500).send({ error: 'Erro ao processar a solicitação' });
     }
   }
 }
 
 export { LoginUserController };
+
