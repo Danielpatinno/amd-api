@@ -32,14 +32,12 @@ class CreateUserController {
     }
 
     try {
-      // Tenta criar o usuário através do serviço
       const userData = await this.userService.execute({ name, email, password });
 
-      // Gera um token JWT
       const token = jwt.sign(
         { id: userData.id, email: userData.email },
         process.env.JWT_SECRET as string,
-        { expiresIn: '10d' } // Tempo de expiração do token
+        { expiresIn: '10d' } 
       );
 
       reply.status(201).send({ user: userData, token });
