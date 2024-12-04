@@ -22,8 +22,6 @@ export async function userRoutes(fastify: FastifyInstance, options: FastifyPlugi
     return new CreateUserController().handle(request, reply)
   })
 
-  // fastify.get('/me', { preHandler: authMiddleware }, getUserProfile);
-
   fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
     return new LoginUserController().handle(request, reply);
   });
